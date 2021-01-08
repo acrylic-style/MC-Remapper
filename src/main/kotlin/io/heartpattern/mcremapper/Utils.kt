@@ -53,7 +53,7 @@ fun String.toTypeName(): String {
             return if (this.startsWith("[")) {
                 this.replace("\\[+(.*)".toRegex(), "$1").toTypeName()
             } else {
-                this.replace("(.*/|)(.*)".toRegex(), "$2").decapitalize().renameKeywords()
+                this.replace("(.*/|)(.*)".toRegex(), "$2").replace(";", "s").decapitalize().renameKeywords()
             }
         }
     }
