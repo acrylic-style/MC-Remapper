@@ -53,9 +53,18 @@ fun String.toTypeName(): String {
             return if (this.startsWith("[")) {
                 this.replace("\\[+(.*)".toRegex(), "$1").toTypeName()
             } else {
-                this.replace("(.*/|)(.*)".toRegex(), "$2").decapitalize()
+                this.replace("(.*/|)(.*)".toRegex(), "$2").decapitalize().renameKeywords()
             }
         }
     }
 }
 
+fun String.renameKeywords(): String {
+    return when (this) {
+        "string" -> "s" // its not reserved, but it makes more sense
+        "aABB" -> "aabb"
+        "uUID" -> "uuid"
+        "class" -> "clazz"
+        else -> JavaTokens.appendIfToken(this) ?: this
+    }
+}
