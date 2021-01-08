@@ -1,11 +1,11 @@
 plugins {
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version "1.4.10"
     application
     `maven-publish`
 }
 
 group = "io.heartpattern"
-version = "2.0.2-SNAPSHOT"
+version = "2.0.3-SNAPSHOT"
 
 repositories {
     maven("https://maven.heartpattern.io/repository/maven-public/")
@@ -13,13 +13,12 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.github.ajalt", "clikt", "2.1.0")
+    implementation("com.github.ajalt.clikt", "clikt", "3.0.1")
     implementation("org.ow2.asm", "asm", "8.0.1")
     implementation("org.ow2.asm", "asm-commons", "8.0.1")
     implementation("org.ow2.asm", "asm-tree", "8.0.1")
-    implementation("com.google.guava", "guava", "28.1-jre")
     implementation("me.tongfei", "progressbar", "0.8.1")
-    implementation("kr.heartpattern","MCVersions","1.0.0-SNAPSHOT")
+    implementation("io.heartpattern","MCVersions","1.0.0-SNAPSHOT")
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
@@ -32,9 +31,8 @@ application {
 tasks {
     compileKotlin {
         kotlinOptions {
+            freeCompilerArgs = listOf("-progressive")
             jvmTarget = "1.8"
-            freeCompilerArgs = freeCompilerArgs + "-XXLanguage:+InlineClasses"
-            freeCompilerArgs = freeCompilerArgs + "-Xuse-experimental=kotlin.Experimental"
         }
     }
 
