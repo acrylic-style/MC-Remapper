@@ -2,10 +2,13 @@ package io.heartpattern.mcremapper.visitor
 
 import io.heartpattern.mcremapper.model.LocalVariableFixType
 import io.heartpattern.mcremapper.model.LocalVariableFixType.*
+import io.heartpattern.mcremapper.toTypeName
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Type
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Fix local variable name is always \u2603(☃)
@@ -22,6 +25,7 @@ class LocalVariableFixVisitor(
         exceptions: Array<out String>?
     ): MethodVisitor {
         val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
+        val count = HashMap<String, AtomicInteger>()
 
         return object : MethodVisitor(Opcodes.ASM8, methodVisitor) {
             override fun visitLocalVariable(
@@ -38,7 +42,13 @@ class LocalVariableFixVisitor(
                 }
 
                 when (type) {
-                    RENAME -> super.visitLocalVariable("debug$index", descriptor, signature, start, end, index)
+                    RENAME -> {
+                        val newName = Type.getType(descriptor).internalName.toTypeName()
+                        if (!count.containsKey(newName)) count[newName] = AtomicInteger()
+                        var i = ""
+                        if (count[newName]!!.getAndIncrement() > 0) i = count[newName]!!.get().toString()
+                        super.visitLocalVariable("$newName$i", descriptor, signature, start, end, index)
+                    }
                     NO -> super.visitLocalVariable(name, descriptor, signature, start, end, index)
                     DELETE -> Unit// Do nothing
                 }
