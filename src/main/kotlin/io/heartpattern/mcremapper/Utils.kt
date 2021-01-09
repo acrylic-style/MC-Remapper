@@ -53,7 +53,9 @@ fun String.toTypeName(): String {
             return if (this.startsWith("[")) {
                 this.replace("\\[+(.*)".toRegex(), "$1").toTypeName()
             } else {
-                this.replace("(.*/|)(.*)".toRegex(), "$2").replace(";", "s").decapitalize().renameKeywords()
+                this.replace("(.*/|)(.*)".toRegex(), "$2")
+                    .replace("(.*\\$|)(.*)".toRegex(), "$2")
+                    .decapitalize()
             }
         }
     }
@@ -65,6 +67,14 @@ fun String.renameKeywords(): String {
         "aABB" -> "aabb"
         "uUID" -> "uuid"
         "class" -> "clazz"
-        else -> JavaTokens.appendIfToken(this) ?: this
+        "double" -> "d"
+        "float" -> "f"
+        "long" -> "l"
+        "short" -> "s"
+        "boolean" -> "flag"
+        "char" -> "c"
+        "int" -> "i"
+        else -> (JavaTokens.appendIfToken(this) ?: this)
+            .replace("[;]".toRegex(), "s")
     }
 }

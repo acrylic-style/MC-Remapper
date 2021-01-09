@@ -2,6 +2,7 @@ package io.heartpattern.mcremapper.visitor
 
 import io.heartpattern.mcremapper.model.LocalVariableFixType
 import io.heartpattern.mcremapper.model.LocalVariableFixType.*
+import io.heartpattern.mcremapper.renameKeywords
 import io.heartpattern.mcremapper.toTypeName
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.Label
@@ -43,7 +44,7 @@ class LocalVariableFixVisitor(
 
                 when (type) {
                     RENAME -> {
-                        val newName = Type.getType(descriptor).internalName.toTypeName()
+                        val newName = Type.getType(descriptor).internalName.toTypeName().renameKeywords()
                         if (!count.containsKey(newName)) count[newName] = AtomicInteger()
                         var i = ""
                         if (count[newName]!!.getAndIncrement() > 0) i = count[newName]!!.get().toString()
