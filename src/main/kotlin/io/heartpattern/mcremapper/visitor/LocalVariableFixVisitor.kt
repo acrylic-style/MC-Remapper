@@ -37,7 +37,7 @@ class LocalVariableFixVisitor(
                 end: Label?,
                 index: Int
             ) {
-                if (name == null || name != "\u2603") {
+                if (name == null) {
                     super.visitLocalVariable(name, descriptor, signature, start, end, index)
                     return
                 }

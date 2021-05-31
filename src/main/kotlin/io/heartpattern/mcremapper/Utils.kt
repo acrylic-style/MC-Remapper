@@ -2,6 +2,7 @@ package io.heartpattern.mcremapper
 
 import java.io.File
 import java.net.URL
+import java.util.Locale
 
 /**
  * Convert a binary name of a class or an interface in its internal form to the normal form. Simply replace '/' to '.'
