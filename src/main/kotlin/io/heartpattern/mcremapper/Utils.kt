@@ -61,11 +61,16 @@ fun String.toTypeName(): String {
     }
 }
 
+// rename all reserved keywords and weirds
 fun String.renameKeywords(): String {
+    // examples:
+    // - AABB -> aABB -> aabb
+    // - URI -> uRI -> uri
+    // - UUID -> uUID -> uuid
+    // - YELLINGCLASS -> yELLINGCLASS -> yellingclass
+    if (this.substring(0, 1).toLowerCase() + this.toUpperCase().substring(1) == this) return this.toLowerCase()
     return when (this) {
-        "string" -> "s" // its not reserved, but it makes more sense
-        "aABB" -> "aabb"
-        "uUID" -> "uuid"
+        "string" -> "s"
         "class" -> "clazz"
         "double" -> "d"
         "float" -> "f"
