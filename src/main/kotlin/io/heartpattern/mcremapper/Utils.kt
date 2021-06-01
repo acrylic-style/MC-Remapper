@@ -68,7 +68,6 @@ fun String.renameKeywords(): String {
     // - URI -> uRI -> uri
     // - UUID -> uUID -> uuid
     // - YELLINGCLASS -> yELLINGCLASS -> yellingclass
-    if (this == "this") return this
     if (this.substring(0, 1).toLowerCase() + this.toUpperCase().substring(1) == this) return this.toLowerCase()
     return when (this) {
         "string" -> "s"

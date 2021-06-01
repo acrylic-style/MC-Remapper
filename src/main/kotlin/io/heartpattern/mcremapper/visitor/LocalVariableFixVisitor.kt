@@ -9,6 +9,8 @@ import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
+import java.nio.charset.CharsetEncoder
+import java.nio.charset.StandardCharsets
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -37,7 +39,7 @@ class LocalVariableFixVisitor(
                 end: Label?,
                 index: Int
             ) {
-                if (name == null) {
+                if (name == null || StandardCharsets.US_ASCII.newEncoder().canEncode(name)) {
                     super.visitLocalVariable(name, descriptor, signature, start, end, index)
                     return
                 }
