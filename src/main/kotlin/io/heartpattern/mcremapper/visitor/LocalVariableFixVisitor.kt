@@ -9,12 +9,11 @@ import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
-import java.nio.charset.CharsetEncoder
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * Fix local variable name is always \u2603(☃)
+ * Fix local variable name is always $$<number>
  */
 class LocalVariableFixVisitor(
     cv: ClassVisitor,
@@ -39,7 +38,7 @@ class LocalVariableFixVisitor(
                 end: Label?,
                 index: Int
             ) {
-                if (name == null || StandardCharsets.US_ASCII.newEncoder().canEncode(name)) {
+                if (name == null || (StandardCharsets.US_ASCII.newEncoder().canEncode(name) && !name.startsWith("$$"))) {
                     super.visitLocalVariable(name, descriptor, signature, start, end, index)
                     return
                 }
